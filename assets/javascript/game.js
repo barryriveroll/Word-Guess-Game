@@ -4,22 +4,24 @@ var lettersGuessed = [];
 var maxLives = 3;
 var currentLives;
 var kills = 0;
+var zombiePosition = 0;
 
 var guessesCountText = document.getElementById("guesses-count");
 var guessedLettersText = document.getElementById("guessed-letters");
 var wordSpots = document.getElementById("word-spots");
 var killsText = document.getElementById("kills-text");
 var livesText = document.getElementById("lives-text");
+var zombieSprite = document.getElementById("zombie-sprite");
 
 var word = {
-    currentWord: "zombie",
-    currentLetters: "______",
+    currentWord: "",
+    currentLetters: "",
     wordBank: ["shotgun", "zombie", "survival", "safe-zone", 
                 "food", "brains", "shoot"],
     drawSpots: function () {
         var newBlanks = "";
         for (var i = 0; i < this.currentLetters.length; i++) {
-            newBlanks = newBlanks + this.currentLetters[i] + " ";
+            newBlanks = newBlanks + this.currentLetters[i] + "   ";
         }
         wordSpots.textContent = newBlanks;
     },
@@ -52,8 +54,16 @@ var word = {
         }
         currentGuesses = maxGuesses;
         lettersGuessed = [];
-        killsText.textContent = kills;
-        livesText.textContent = currentLives;
+        killsText.textContent = "";
+        livesText.textContent = "";
+        for (var i = 0; i < currentLives; i++) {
+            livesText.textContent = livesText.textContent + "❤️";
+        }
+        for (var i = 0; i < kills; i++) {
+            killsText.textContent = killsText.textContent + "💀";
+        }
+        zombiePosition = 0;
+        zombieSprite.style.right = zombiePosition + "%";
 
         this.drawSpots();
         updateGameText();
@@ -89,12 +99,15 @@ document.onkeyup = function(event) {
             word.fillCorrectLetters(userInput);
         } else {
             lettersGuessed.push(userInput);
+            zombiePosition = zombiePosition + (300 / maxGuesses);
+            zombieSprite.style.right = zombiePosition + "%";
             currentGuesses--;
         }
     }
     updateGameText();
     if (currentGuesses === 0) {
         currentLives--;
+        for (var i = 0; i < currentLives; i++)
 
         if (currentLives === 0) {
             newGame();

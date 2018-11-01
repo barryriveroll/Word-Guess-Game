@@ -5,26 +5,40 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Creepster" rel="stylesheet">
+        <link rel="stylesheet" href="assets/css/style.css">
         <title>Word Game Zombies</title>
     </head>
-    <body>
-        <div class="container">
-            <div class="jumbotron">
-                <h1 class="display-4">Word Guess: Zombies</h1>
-                <p class="lead">Press any key to begin.</p>
-            </div>
-            <div class="row">
-                <div class="col-md-10">
-                    <h2><span id="word-spots">word here</span></h2>
+    <body class="gradient">
+        <div class="background">
+            <div class="container text-warning">
+                <div class="row rounded">
+                    <div class="col-md-12 text-center">
+                        <h1 class="display-4">Word Guess: Zombies</h1>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <h3>Stats:</h3>
-                    <hr>
-                    <p>Guesses: <span id="guesses-count"></span></p>
-                    <p>Letters Guessed: <span id="guessed-letters"></span></p>
-                    <hr>
-                    <p>Kills: <span id="kills-text">0</span></p>
-                    <p>Lives: <span id="lives-text"></span></p>
+                <div class="row spacer">
+                    <div class="col-sm-3 char-col">
+                        <img id="hero-sprite" src="assets/images/heroShoot.gif">
+                    </div>
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-3 char-col">
+                        <img class="flip-image" id="zombie-sprite" src="assets/images/zombieWalk.gif">
+                    </div>
+                </div>
+                <div class="row bg-dark rounded">
+                    <div class="col-md-8 text-center ">
+                        <h2><span id="word-spots" class="">word here</span></h2>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>Stats:</h3>
+                        <hr>
+                        <p>Guesses: <span id="guesses-count"></span></p>
+                        <p>Letters Guessed: <span id="guessed-letters"></span></p>
+                        <hr>
+                        <p>Kills: <span id="kills-text">0</span></p>
+                        <p>Lives: <span id="lives-text"></span></p>
+                    </div>
                 </div>
             </div>
         </div>

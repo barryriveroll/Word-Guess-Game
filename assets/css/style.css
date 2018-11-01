@@ -1,0 +1,63 @@
+.gradient {
+    background-image: linear-gradient(rgb(135, 158, 168), rgb(0, 0, 0));
+}
+
+html {
+    height: 100%;
+}
+body {
+    height: 83%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1 {
+    font-family: 'Creepster', cursive;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    font-size: 100px !important;
+}
+
+.flip-image {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+.char-row {
+    position: relative;
+}
+
+#zombie-sprite {
+    position: absolute;
+    bottom: 0;
+    height: 40%;
+    right: 0;
+}
+
+#hero-sprite {
+    position: absolute;
+    bottom: 16px;
+    height: 35%;
+}
+
+h2 {
+    letter-spacing: 5px;
+    font-size: 50px;
+    padding-top: 30px;
+}
+
+.spacer {
+    height: 540px;
+}
+
+.background {
+    background-image: url("../images/background.png");
+    background-repeat:no-repeat;
+    background-position: center center;
+    height: 100%;
+}
