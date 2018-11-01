@@ -39,10 +39,21 @@ h1 {
     right: 0;
 }
 
+#blood-sprite {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+}
+
 #hero-sprite {
     position: absolute;
     bottom: 16px;
     height: 35%;
+}
+
+#guesses-count,
+#guessed-letters {
+    
 }
 
 h2 {
@@ -53,6 +64,10 @@ h2 {
 
 .spacer {
     height: 540px;
+}
+
+p {
+    font-size: 20px;
 }
 
 .background {

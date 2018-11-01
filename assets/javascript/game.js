@@ -12,12 +12,14 @@ var wordSpots = document.getElementById("word-spots");
 var killsText = document.getElementById("kills-text");
 var livesText = document.getElementById("lives-text");
 var zombieSprite = document.getElementById("zombie-sprite");
+var heroSprite = document.getElementById("hero-sprite");
+var bloodSprite = document.getElementById("blood-sprite");
 
 var word = {
-    currentWord: "",
+    currentWord:    "",
     currentLetters: "",
-    wordBank: ["shotgun", "zombie", "survival", "safe-zone", 
-                "food", "brains", "shoot"],
+    wordBank:       ["shotgun", "zombie", "survival", "safe-zone", 
+                     "food", "brains", "shoot"],
     drawSpots: function () {
         var newBlanks = "";
         for (var i = 0; i < this.currentLetters.length; i++) {
@@ -64,6 +66,7 @@ var word = {
         }
         zombiePosition = 0;
         zombieSprite.style.right = zombiePosition + "%";
+        bloodSprite.style.right = zombiePosition + "%";
 
         this.drawSpots();
         updateGameText();
@@ -94,13 +97,19 @@ document.onkeyup = function(event) {
 
     if ("abcdefghijklmnopqrstuvwxyz".includes(userInput.toLowerCase()) && 
     !lettersGuessed.includes(userInput) &&
+    !word.currentLetters.includes(userInput) &&
     currentGuesses > 0) {
         if (word.currentWord.includes(userInput)) {
             word.fillCorrectLetters(userInput);
+            heroSprite.src="assets/images/heroShoot.gif";
+            bloodSprite.src="assets/images/bloodSplash.gif";
         } else {
             lettersGuessed.push(userInput);
             zombiePosition = zombiePosition + (300 / maxGuesses);
             zombieSprite.style.right = zombiePosition + "%";
+            heroSprite.src="assets/images/heroShoot.gif";
+            zombieSprite.src="assets/images/zombieWalk.gif";
+            bloodSprite.style.right = zombiePosition + "%";
             currentGuesses--;
         }
     }
