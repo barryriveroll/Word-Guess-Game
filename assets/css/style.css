@@ -1,5 +1,5 @@
 .gradient {
-    background-image: linear-gradient(rgb(135, 158, 168), rgb(0, 0, 0));
+    background-image: linear-gradient(rgb(113, 117, 119), rgb(21, 27, 32));
 }
 
 html {
@@ -10,6 +10,7 @@ body {
     margin: 0;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    font-family: 'Londrina Solid', cursive;
 }
 
 h1 {
@@ -67,7 +68,7 @@ h2 {
 }
 
 p {
-    font-size: 20px;
+    font-size: 26px;
 }
 
 .background {
