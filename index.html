@@ -19,18 +19,23 @@
                     </div>
                 </div>
                 <div class="row spacer">
+                    <div id="game-over" class="text-center">
+                        <h2>GAME OVER!</h2>
+                        <h4>Total Kills: 💀 <span id="end-kills"></span></h4>
+                        <h4>Press Spacebar to restart</h4>
+                    </div>
                     <div class="col-sm-3 char-col">
                         <img id="hero-sprite" src="assets/images/heroStand.png">
                     </div>
                     <div class="col-sm-6"></div>
-                    <div class="col-sm-3 char-col">
-                        <img class="flip-image" id="zombie-sprite" src="assets/images/zombieStand.png">
+                    <div class="col-sm-3 char-col" id="zombie-div">
+                        <img class="flip-image" id="zombie-sprite" style="opacity:0" src="assets/images/zombieStand.png">
                         <img id="blood-sprite" src="assets/images/empty.gif">
                     </div>
                 </div>
                 <div class="row bg-dark rounded">
                     <div class="col-md-8 text-center ">
-                        <h2><span class="rounded p-3 bg-warning text-dark" id="word-spots" class="">_______</span></h2>
+                        <h3><span class="rounded p-3 bg-warning text-dark" id="word-spots" class="">_______</span></h3>
                         <br>
                         <div class="row">
                             <div class="col-md-4 text-right">

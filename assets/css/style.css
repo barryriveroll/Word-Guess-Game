@@ -36,7 +36,7 @@ h1 {
 #zombie-sprite {
     position: absolute;
     bottom: 0;
-    height: 40%;
+    height: 50%;
     right: 0;
 }
 
@@ -52,19 +52,32 @@ h1 {
     height: 35%;
 }
 
-#guesses-count,
-#guessed-letters {
-    
+h2 {
+    font-family: 'Creepster', cursive;
+    -webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: black;
+    color: red;
+    font-size: 140px !important;
 }
 
-h2 {
+h3 {
     letter-spacing: 5px;
     font-size: 50px;
     padding-top: 30px;
 }
 
+h4 {
+    font-size: 50px;
+}
+
 .spacer {
     height: 540px;
+    position: relative;
+}
+
+#game-over {
+    position: absolute;
+    width: 100%;
 }
 
 p {

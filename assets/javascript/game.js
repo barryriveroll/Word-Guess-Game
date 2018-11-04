@@ -14,6 +14,12 @@ var livesText = $("#lives-text");
 var zombieSprite = $("#zombie-sprite");
 var heroSprite = $("#hero-sprite");
 var bloodSprite = $("#blood-sprite");
+var gameOver = $("#game-over");
+var endKills = $("#end-kills");
+var zombieSpriteNew;
+var bloodSpriteNew;
+var zombieSpriteOld;
+
 
 var word = {
     currentWord:    "",
@@ -42,7 +48,14 @@ var word = {
 
         if (this.currentLetters === this.currentWord) {
             kills++;
-            this.initializeNewWord();
+            zombieSpriteNew.animate({ opacity: 0}, "fast");
+            bloodSpriteNew.animate({ opacity: 0}, "slow");
+            
+            wordSpots.fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+            
+            setTimeout (function() {
+                word.initializeNewWord();
+            }, 2000);
         }
     },
     initializeNewWord () {
@@ -61,9 +74,12 @@ var word = {
         for (var i = 0; i < kills; i++) {
             killsText.text(killsText.text() + "💀");
         }
-        zombiePosition = 0;
-        zombieSprite.css("right", zombiePosition + "%");
-        bloodSprite.css("right", zombiePosition + "%");
+        // zombieSpriteOld = zombieSpriteNew;
+        // zombieSpriteOld.remove();
+        zombieSpriteNew = zombieSprite.clone().appendTo($("#zombie-div"));
+        bloodSpriteNew = bloodSprite.clone().appendTo($("#zombie-div"));
+        bloodSpriteNew.attr("src","assets/images/empty.gif");
+        zombieSpriteNew.animate({ opacity: 1}, "normal");
 
         this.drawSpots();
         updateGameText();
@@ -77,6 +93,7 @@ function newGame () {
     currentLives = maxLives;
     livesText.text(currentLives);
     word.initializeNewWord();
+    gameOver.hide();
 }
 
 function updateGameText () {
@@ -88,49 +105,50 @@ function updateGameText () {
     guessedLettersText.text(newLettersText);
 }
 
-function guessWrong () {
-    lettersGuessed.push(userInput);
-    zombiePosition = zombiePosition + (300 / maxGuesses);
-    heroSprite.attr("src","assets/images/heroShoot.gif");
-    zombieSprite.attr("src","assets/images/zombieWalk.gif");
-    zombieSprite.animate({ right: "+=30%" }, "slow");
-    bloodSprite.animate({ right: "+=30%" }, "slow");
+function guessWrong (input) {
+    lettersGuessed.push(input);
+    zombieSpriteNew.attr("src","assets/images/zombieWalk.gif");
+    zombieSpriteNew.animate({ right: "+=30%" }, "slow");
+    bloodSpriteNew.animate({ right: "+=30%" }, "slow");
     currentGuesses--;
+
+    if (currentGuesses === 0) {
+        currentLives--;
+        zombieSpriteNew.animate({ opacity: 0}, "fast");
+        if (currentLives === 0) {
+            gameOver.show();
+            endKills.text(kills);
+        } else {
+            word.initializeNewWord();
+        }
+    }
 }
 
-function guessRight () {
-    word.fillCorrectLetters(userInput);
-    heroSprite.attr("src","assets/images/heroShoot.gif");
-    bloodSprite.attr("src","assets/images/bloodSplash.gif");
+function guessRight (input) {
+    bloodSpriteNew.attr("src","assets/images/bloodSplash.gif");
+    word.fillCorrectLetters(input);
 }
 
 $(document).ready(function() {
     $("body").keyup(function(event)  {
-        // Check if key pressed is a-z
-        if (event.which < 91 && event.which > 64) {
-            // Convert event.which to string from character code
-            var userInput = String.fromCharCode(event.which).toLowerCase();
-
-            // Check if letter pressed is NOT already guessed
-            if (!lettersGuessed.includes(userInput) &&
-            !word.currentLetters.includes(userInput) &&
-            currentGuesses > 0) {
-                if (word.currentWord.includes(userInput)) {
-                    guessRight();
-                } else {
-                    guessWrong();
+        if (currentLives !== 0) {
+            if (event.which < 91 && event.which > 64) {
+                var userInput = String.fromCharCode(event.which).toLowerCase();
+                if (!lettersGuessed.includes(userInput) &&
+                !word.currentLetters.includes(userInput) &&
+                currentGuesses > 0) {
+                    heroSprite.attr("src","assets/images/heroShoot.gif");
+                    if (word.currentWord.includes(userInput)) {
+                        guessRight(userInput);
+                    } else {
+                        guessWrong(userInput);
+                    }
                 }
+                updateGameText();
             }
-            updateGameText();
-            if (currentGuesses === 0) {
-                currentLives--;
-                for (var i = 0; i < currentLives; i++)
-
-                if (currentLives === 0) {
-                    newGame();
-                } else {
-                    word.initializeNewWord();
-                }
+        } else {
+            if (event.which === 32) {
+                newGame();
             }
         }
     });
