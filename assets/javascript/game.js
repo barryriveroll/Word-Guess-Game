@@ -1,40 +1,85 @@
-var maxGuesses = 10;
-var currentGuesses = 10;
-var lettersGuessed = [];
-var maxLives = 3;
-var currentLives;
-var kills = 0;
-var zombiePosition = 0;
-
-var guessesCountText = $("#guesses-count");
-var guessedLettersText = $("#guessed-letters");
-var wordSpots = $("#word-spots");
-var killsText = $("#kills-text");
-var livesText = $("#lives-text");
-var zombieSprite = $("#zombie-sprite");
-var heroSprite = $("#hero-sprite");
-var bloodSprite = $("#blood-sprite");
-var gameOver = $("#game-over");
-var endKills = $("#end-kills");
-var zombieSpriteNew;
-var bloodSpriteNew;
-var zombieSpriteOld;
-
-
-var word = {
+var game = {
+    // Element variables
     currentWord:    "",
     currentLetters: "",
     wordBank:       ["shotgun", "zombie", "survival", "horror", 
                      "food", "brains", "shoot", "frankenstein", "shamble",
                      "undead", "corpse", "macabre", "groaning", "graveyard"],
-    drawSpots: function () {
+    maxGuesses:     10,
+    currentGuesses: 10,
+    lettersGuessed: [],
+    maxLives:       3,
+    currentLives:   3,
+    kills:          0,
+    zombiePosition: 0,
+
+    // jQuery element variables
+    guessesCountText:   $("#guesses-count"),
+    guessedLettersText: $("#guessed-letters"),
+    wordSpots:          $("#word-spots"),
+    killsText:          $("#kills-text"),
+    livesText:          $("#lives-text"),
+    zombieSprite:       $("#zombie-sprite"),
+    heroSprite:         $("#hero-sprite"),
+    bloodSprite:        $("#blood-sprite"),
+    gameOver:           $("#game-over"),
+    endKills:           $("#end-kills"),
+    zombieSpriteNew:    null,
+    bloodSpriteNew:     null,
+
+    newGame: function() {
+        this.kills = 0;
+        this.killsText.text(0);
+        this.currentLives = this.maxLives;
+        this.livesText.text(this.currentLives);
+        this.initializeNewWord();
+        this.gameOver.hide();
+    },
+
+    updateGameText: function() {
+        this.guessesCountText.text(this.currentGuesses);
+        var newLettersText = "";
+        for (var i = 0; i < this.lettersGuessed.length; i++) {
+            newLettersText = newLettersText + this.lettersGuessed[i] + " ";
+        }
+        this.guessedLettersText.text(newLettersText);
+    },
+
+    guessWrong: function(input) {
+        this.lettersGuessed.push(input);
+        this.zombieSpriteNew.attr("src","assets/images/zombieWalk.gif");
+        this.zombieSpriteNew.animate({ right: "+=30%" }, "slow");
+        this.bloodSpriteNew.animate({ right: "+=30%" }, "slow");
+        this.currentGuesses--;
+
+        if (this.currentGuesses === 0) {
+            this.currentLives--;
+            this.zombieSpriteNew.animate({ opacity: 0 }, "fast");
+            this.bloodSpriteNew.animate({ opacity: 0 }, "slow");
+            if (this.currentLives === 0) {
+                this.gameOver.show();
+                this.endKills.text(this.kills);
+                this.livesText.text("");
+            } else {
+                this.initializeNewWord();
+            }
+        }
+    },
+
+    guessRight: function(input) {
+        this.bloodSpriteNew.attr("src","assets/images/bloodSplash.gif");
+        this.fillCorrectLetters(input);
+    },
+
+    drawSpots: function() {
         var newBlanks = "";
         for (var i = 0; i < this.currentLetters.length; i++) {
-            newBlanks = newBlanks + this.currentLetters[i] + "   ";
+            newBlanks = newBlanks + this.currentLetters[i] + " ";
         }
-        wordSpots.text(newBlanks);
+        this.wordSpots.text(newBlanks);
     },
-    fillCorrectLetters: function (letter) {
+
+    fillCorrectLetters: function(letter) {
         var newWordSpots = "";
         for (var i = 0; i < this.currentWord.length; i++) {
             if (letter === this.currentWord[i]) {
@@ -47,110 +92,67 @@ var word = {
         this.drawSpots();
 
         if (this.currentLetters === this.currentWord) {
-            kills++;
-            zombieSpriteNew.animate({ opacity: 0}, "fast");
-            bloodSpriteNew.animate({ opacity: 0}, "slow");
+            this.kills++;
+            this.zombieSpriteNew.animate({ opacity: 0 }, "fast");
+            this.bloodSpriteNew.animate({ opacity: 0 }, "slow");
             
-            wordSpots.fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+            this.wordSpots.fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
             
             setTimeout (function() {
-                word.initializeNewWord();
+                game.initializeNewWord();
             }, 2000);
         }
     },
-    initializeNewWord () {
+
+    initializeNewWord: function() {
         this.currentWord = this.wordBank[Math.floor(Math.random() * this.wordBank.length)];
         this.currentLetters = "";
         for (var i = 0; i < this.currentWord.length; i++) {
             this.currentLetters = this.currentLetters + "_";
         }
-        currentGuesses = maxGuesses;
-        lettersGuessed = [];
-        killsText.text("");
-        livesText.text("");
-        for (var i = 0; i < currentLives; i++) {
-            livesText.text(livesText.text() + "❤️");
+        game.currentGuesses = game.maxGuesses;
+        game.lettersGuessed = [];
+        this.killsText.text("");
+        this.livesText.text("");
+        for (var i = 0; i < game.currentLives; i++) {
+            this.livesText.text(this.livesText.text() + "❤️");
         }
-        for (var i = 0; i < kills; i++) {
-            killsText.text(killsText.text() + "💀");
+        for (var i = 0; i < game.kills; i++) {
+            this.killsText.text(this.killsText.text() + "💀");
         }
-        // zombieSpriteOld = zombieSpriteNew;
-        // zombieSpriteOld.remove();
-        zombieSpriteNew = zombieSprite.clone().appendTo($("#zombie-div"));
-        bloodSpriteNew = bloodSprite.clone().appendTo($("#zombie-div"));
-        bloodSpriteNew.attr("src","assets/images/empty.gif");
-        zombieSpriteNew.animate({ opacity: 1}, "normal");
+        this.zombieSpriteNew = this.zombieSprite.clone().appendTo($("#zombie-div"));
+        this.bloodSpriteNew = this.bloodSprite.clone().appendTo($("#zombie-div"));
+        this.bloodSpriteNew.attr("src","assets/images/empty.gif");
+        this.zombieSpriteNew.animate({ opacity: 1}, "normal");
 
         this.drawSpots();
-        updateGameText();
+        game.updateGameText();
         console.log(this.currentWord);
     }
-};
-
-function newGame () {
-    kills = 0;
-    killsText.text(0);
-    currentLives = maxLives;
-    livesText.text(currentLives);
-    word.initializeNewWord();
-    gameOver.hide();
-}
-
-function updateGameText () {
-    guessesCountText.text(currentGuesses);
-    var newLettersText = "";
-    for (var i = 0; i < lettersGuessed.length; i++) {
-        newLettersText = newLettersText + lettersGuessed[i] + " ";
-    }
-    guessedLettersText.text(newLettersText);
-}
-
-function guessWrong (input) {
-    lettersGuessed.push(input);
-    zombieSpriteNew.attr("src","assets/images/zombieWalk.gif");
-    zombieSpriteNew.animate({ right: "+=30%" }, "slow");
-    bloodSpriteNew.animate({ right: "+=30%" }, "slow");
-    currentGuesses--;
-
-    if (currentGuesses === 0) {
-        currentLives--;
-        zombieSpriteNew.animate({ opacity: 0}, "fast");
-        if (currentLives === 0) {
-            gameOver.show();
-            endKills.text(kills);
-        } else {
-            word.initializeNewWord();
-        }
-    }
-}
-
-function guessRight (input) {
-    bloodSpriteNew.attr("src","assets/images/bloodSplash.gif");
-    word.fillCorrectLetters(input);
 }
 
 $(document).ready(function() {
     $("body").keyup(function(event)  {
-        if (currentLives !== 0) {
+        if (game.currentLives !== 0) {
             if (event.which < 91 && event.which > 64) {
                 var userInput = String.fromCharCode(event.which).toLowerCase();
-                if (!lettersGuessed.includes(userInput) &&
-                !word.currentLetters.includes(userInput) &&
-                currentGuesses > 0) {
-                    heroSprite.attr("src","assets/images/heroShoot.gif");
-                    if (word.currentWord.includes(userInput)) {
-                        guessRight(userInput);
+                if (!game.lettersGuessed.includes(userInput) &&
+                !game.currentLetters.includes(userInput) &&
+                game.currentGuesses > 0) {
+                    game.heroSprite.attr("src","assets/images/heroShoot.gif");
+                    if (game.currentWord.includes(userInput)) {
+                        game.guessRight(userInput);
                     } else {
-                        guessWrong(userInput);
+                        game.guessWrong(userInput);
                     }
                 }
-                updateGameText();
+                game.updateGameText();
             }
         } else {
             if (event.which === 32) {
-                newGame();
+                game.newGame();
             }
         }
     });
-    newGame();
+    game.newGame();
 });
