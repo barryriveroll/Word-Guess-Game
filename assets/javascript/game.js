@@ -1,5 +1,5 @@
 var game = {
-    // Element variables
+    // Game logic variables
     currentWord:    "",
     currentLetters: "",
     wordBank:       ["shotgun", "zombie", "survival", "horror", 
@@ -12,6 +12,7 @@ var game = {
     currentLives:   3,
     kills:          0,
     zombiePosition: 0,
+    gameBegin:      true,
 
     // jQuery element variables
     guessesCountText:   $("#guesses-count"),
@@ -33,6 +34,7 @@ var game = {
         this.currentLives = this.maxLives;
         this.livesText.text(this.currentLives);
         this.initializeNewWord();
+        audio.playZombieSound();
         this.gameOver.hide();
     },
 
@@ -56,6 +58,7 @@ var game = {
             this.currentLives--;
             this.zombieSpriteNew.animate({ opacity: 0 }, "fast");
             this.bloodSpriteNew.animate({ opacity: 0 }, "slow");
+            audio.playRoundEndSound(0);
             if (this.currentLives === 0) {
                 this.gameOver.show();
                 this.endKills.text(this.kills);
@@ -97,6 +100,8 @@ var game = {
             this.bloodSpriteNew.animate({ opacity: 0 }, "slow");
             
             this.wordSpots.fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200).fadeOut(200).fadeIn(200);
+
+            audio.playRoundEndSound(1);
             
             setTimeout (function() {
                 game.initializeNewWord();
@@ -133,24 +138,83 @@ var game = {
 
 var audio = {
     on: true,
+    gunshotSound: new Audio("assets/audio/gunshot.mp3"),
+    zombieSound1: new Audio("assets/audio/zombie-1.wav"),
+    zombieSound2: new Audio("assets/audio/zombie-2.wav"),
+    zombieSound3: new Audio("assets/audio/zombie-3.wav"),
+    zombieSound4: new Audio("assets/audio/zombie-4.wav"),
+    failureSound: new Audio("assets/audio/failure.ogg"),
+    successSound: new Audio("assets/audio/success.mp3"),
+
+    playGunshot: function() {
+        if (this.on) {
+            const origAudio = this.gunshotSound;
+            const newAudio = origAudio.cloneNode();
+            newAudio.play();
+        }
+    },
+
+    playZombieSound: function() {
+        if (this.on) {
+            var rand = Math.floor(Math.random() * 4);
+            var origAudio = this.zombieSound1;
+            switch (rand) {
+                case 0:
+                    origAudio = this.zombieSound1;
+                    break;
+                case 1:
+                    origAudio = this.zombieSound2;
+                    break;
+                case 2:
+                    origAudio = this.zombieSound3;
+                    break;
+                case 3:
+                    origAudio = this.zombieSound4;
+                    break;
+            }
+            const newAudio = origAudio.cloneNode()
+            newAudio.play();
+        }
+    },
+
+    playRoundEndSound: function(success) {
+        if (this.on) {
+            var origAudio = this.successSound;
+            if (!success) {
+                origAudio = this.failureSound;
+            }
+            const newAudio = origAudio.cloneNode();
+            newAudio.play();
+        }
+    }
 }
 
 $(document).ready(function() {
     $("body").keyup(function(event)  {
         if (game.currentLives !== 0) {
             if (event.which < 91 && event.which > 64) {
-                var userInput = String.fromCharCode(event.which).toLowerCase();
-                if (!game.lettersGuessed.includes(userInput) &&
-                !game.currentLetters.includes(userInput) &&
-                game.currentGuesses > 0) {
-                    game.heroSprite.attr("src","assets/images/heroShoot.gif");
-                    if (game.currentWord.includes(userInput)) {
-                        game.guessRight(userInput);
-                    } else {
-                        game.guessWrong(userInput);
+                if (game.gameBegin) {
+                    $("#begin-game").animate({ opacity: 0 }, "slow");
+                    game.newGame();
+                    game.gameBegin = false;
+                } else {
+                    var userInput = String.fromCharCode(event.which).toLowerCase();
+                    if (!game.lettersGuessed.includes(userInput) &&
+                    !game.currentLetters.includes(userInput) &&
+                    game.currentGuesses > 0) {
+                        game.heroSprite.attr("src","assets/images/heroShoot.gif");
+                        audio.playGunshot();
+                        setTimeout (function() {
+                            audio.playZombieSound();
+                        }, 450);
+                        if (game.currentWord.includes(userInput)) {
+                            game.guessRight(userInput);
+                        } else {
+                            game.guessWrong(userInput);
+                        }
                     }
+                    game.updateGameText();
                 }
-                game.updateGameText();
             }
         } else {
             if (event.which === 32) {
@@ -159,11 +223,11 @@ $(document).ready(function() {
         }
     });
 
-    $('#sound-icon').bind('click', function(){
+    $('#sound-icon').on("click", function() {
         audio.on = !audio.on;
         $("#sound-off").toggle();
     });
 
+    game.gameOver.hide();
     $("#sound-off").hide();
-    game.newGame();
 });

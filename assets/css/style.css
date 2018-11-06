@@ -48,7 +48,7 @@ h1 {
 
 #hero-sprite {
     position: absolute;
-    bottom: 16px;
+    bottom: 30px;
     height: 35%;
 }
 
@@ -87,6 +87,11 @@ h4 {
 }
 
 #game-over {
+    position: absolute;
+    width: 100%;
+}
+
+#begin-game {
     position: absolute;
     width: 100%;
 }

@@ -1,5 +1,5 @@
 # Word-Guess Game
-## Week 2 Homework Assignment, Coding Boot Camp, UNC-Chapel Hill
+## Week 3 Homework Assignment, Coding Boot Camp, UNC-Chapel Hill
 
 Originally submitted on 11/6/2018
 

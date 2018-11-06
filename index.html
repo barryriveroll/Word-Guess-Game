@@ -8,7 +8,6 @@
         <link href="https://fonts.googleapis.com/css?family=Creepster|Londrina+Solid" rel="stylesheet">
         <link rel="stylesheet" href="assets/css/style.css">
         <link rel="stylesheet" href="assets/font-awesome-4.7.0/css/font-awesome.min.css">
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <title>Word Guess: Zombies</title>
     </head>
@@ -17,9 +16,6 @@
             <i class="fa fa-volume-up fa-stack-1x"></i>
             <i id="sound-off" class="fa fa-ban fa-stack-2x"></i>
         </span>
-            <!-- <i class="fa fa-volume-up fa-stack-1x" aria-hidden="true"></i>
-            <i class="fa fa-ban fa-stack-2x"></i> -->
-        
         <div class="background">
             <div class="container text-warning">
                 <div class="row rounded">
@@ -33,6 +29,9 @@
                         <h4>Total Kills: 💀 <span id="end-kills"></span></h4>
                         <h4>Press Spacebar to restart</h4>
                     </div>
+                    <div id="begin-game" class="text-center">
+                        <h4>Press any letter to begin!</h4>
+                    </div>
                     <div class="col-sm-3 char-col">
                         <img id="hero-sprite" src="assets/images/heroStand.png">
                     </div>
@@ -44,7 +43,7 @@
                 </div>
                 <div class="row bg-dark rounded">
                     <div class="col-md-8 text-center ">
-                        <h3><span class="rounded p-3 bg-warning text-dark" id="word-spots" class="">_______</span></h3>
+                        <h3><span class="rounded p-3 bg-warning text-dark" id="word-spots" class=""> </span></h3>
                         <br>
                         <div class="row">
                             <div class="col-md-4 text-right">
@@ -67,8 +66,6 @@
                 </div>
             </div>
         </div>
-
-
         <script src="assets/javascript/game.js"></script>
     </body>
 </html>
