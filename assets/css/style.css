@@ -52,6 +52,17 @@ h1 {
     height: 35%;
 }
 
+#sound-icon {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    font-size: 40px;
+}
+
+#sound-off {
+    color: #E81224;
+}
+
 h2 {
     font-family: 'Creepster', cursive;
     -webkit-text-stroke-width: 2px;

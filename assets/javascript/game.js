@@ -131,6 +131,10 @@ var game = {
     }
 }
 
+var audio = {
+    on: true,
+}
+
 $(document).ready(function() {
     $("body").keyup(function(event)  {
         if (game.currentLives !== 0) {
@@ -154,5 +158,12 @@ $(document).ready(function() {
             }
         }
     });
+
+    $('#sound-icon').bind('click', function(){
+        audio.on = !audio.on;
+        $("#sound-off").toggle();
+    });
+
+    $("#sound-off").hide();
     game.newGame();
 });
